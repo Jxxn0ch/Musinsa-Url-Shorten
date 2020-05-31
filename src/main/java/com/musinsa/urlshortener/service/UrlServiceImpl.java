@@ -1,15 +1,14 @@
 package com.musinsa.urlshortener.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musinsa.urlshortener.dto.request.UrlShortenRequestDto;
 import com.musinsa.urlshortener.dto.response.ResponseDto;
 import com.musinsa.urlshortener.entity.UrlShortenEntity;
 import com.musinsa.urlshortener.repository.UrlShortenRepository;
 import com.musinsa.urlshortener.util.UrlShortenUtil;
-import com.musinsa.urlshortener.vo.UrlShortenVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,54 +29,47 @@ public class UrlServiceImpl implements UrlService {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Value("${app.host}")
+    String host;
+
     @Override
     public ResponseEntity<ResponseDto> requestShortenUrl(UrlShortenRequestDto urlShortenRequestDto) {
         String originUrl =  UrlShortenUtil.removeHttp(urlShortenRequestDto.getUrl());
 
-        Optional<UrlShortenVo> urlShortenVo = objectMapper.convertValue(
-                urlShortenRepository.findByOriginUrl(originUrl), new TypeReference<>() {});
-
-        return urlShortenVo.
-                map(vo -> ResponseEntity.status(CREATED).body(updateRequestCount(vo)))
+        return urlShortenRepository.findByOriginUrl(originUrl)
+                .map(u -> {
+                    u.setRequestCount(u.getRequestCount() + 1);
+                    return ResponseEntity.status(CREATED).body(ResponseDto.builder()
+                            .originUrl(u.getOriginUrl())
+                            .shortenUrl(host + u.getShortUrl())
+                            .requestCount(u.getRequestCount())
+                            .build());
+                })
                 .orElseGet(() -> ResponseEntity.status(CREATED).body(createShortenUrl(originUrl)));
     }
 
     @Override
     public String redirectShortenUrl(String shortenUrl, HttpServletResponse response) {
-        Optional<UrlShortenVo> urlShortenVo = objectMapper.convertValue(
-                urlShortenRepository.findByShortUrl(shortenUrl), new TypeReference<>() {});
+       Optional<UrlShortenEntity> urlShortenEntity = urlShortenRepository.findByShortUrl(shortenUrl);
 
-        if (urlShortenVo.isPresent()) {
-            return urlShortenVo.get().getOriginUrl();
+        if (urlShortenEntity.isPresent()) {
+            return urlShortenEntity.get().getOriginUrl();
         } else {
             return "/error";
         }
     }
 
     private ResponseDto createShortenUrl(String originUrl) {
-        String shortUrl = generateShortUrl();
-
-        urlShortenRepository.save(UrlShortenEntity.builder()
-                                    .originUrl(originUrl)
-                                    .shortUrl(shortUrl)
-                                    .requestCount(1)
-                                    .build());
-
-        return ResponseDto.builder()
+        UrlShortenEntity urlShortenEntity = urlShortenRepository.save(UrlShortenEntity.builder()
                 .originUrl(originUrl)
-                .shortenUrl("http://localhost/" + shortUrl)
+                .shortUrl(generateShortUrl())
                 .requestCount(1)
-                .build();
-    }
-
-    private ResponseDto updateRequestCount(UrlShortenVo urlShortenVo) {
-        urlShortenVo.setRequestCount(urlShortenVo.getRequestCount() + 1);
-        urlShortenRepository.save(objectMapper.convertValue(urlShortenVo, UrlShortenEntity.class));
+                .build());
 
         return ResponseDto.builder()
-                .originUrl(urlShortenVo.getOriginUrl())
-                .shortenUrl("http://localhost/" + urlShortenVo.getShortUrl())
-                .requestCount(urlShortenVo.getRequestCount())
+                .originUrl(urlShortenEntity.getOriginUrl())
+                .shortenUrl(host + urlShortenEntity.getShortUrl())
+                .requestCount(urlShortenEntity.getRequestCount())
                 .build();
     }
 
@@ -95,10 +87,7 @@ public class UrlServiceImpl implements UrlService {
     }
 
     private boolean validationShortUrl(String shortUrl) {
-        Optional<UrlShortenVo> urlShortenVo = objectMapper.convertValue(
-                urlShortenRepository.findByShortUrl(shortUrl), new TypeReference<>() {});
-
-        return urlShortenVo.isEmpty();
+        return urlShortenRepository.findByShortUrl(shortUrl).isEmpty();
     }
 
 }

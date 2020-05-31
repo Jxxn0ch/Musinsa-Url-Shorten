@@ -8,9 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseDto {
-
     private int requestCount;
     private String originUrl;
     private String shortenUrl;
-
 }

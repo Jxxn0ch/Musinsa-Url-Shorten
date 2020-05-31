@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
@@ -24,7 +25,7 @@ public class UrlController {
 
     @PostMapping("url-shorten")
     @ResponseBody
-    public ResponseEntity<ResponseDto> postUrlShorten(@RequestBody UrlShortenRequestDto urlShortenRequestDto) {
+    public ResponseEntity<ResponseDto> postUrlShorten(@RequestBody @Valid UrlShortenRequestDto urlShortenRequestDto) {
         return urlService.requestShortenUrl(urlShortenRequestDto);
     }
 

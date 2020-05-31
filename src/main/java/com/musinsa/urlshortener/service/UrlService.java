@@ -8,6 +8,5 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface UrlService {
     ResponseEntity<ResponseDto> requestShortenUrl(UrlShortenRequestDto urlShortenRequestDto);
-
     String redirectShortenUrl(String shortenUrl, HttpServletResponse response);
 }
