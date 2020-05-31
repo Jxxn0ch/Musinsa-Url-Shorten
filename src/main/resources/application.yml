@@ -45,5 +45,5 @@ logging:
     name: logs/musinsa-urlshortener.log
 
 app:
-  host: http://localhost
+  host: http://localhost/
 

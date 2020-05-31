@@ -25,6 +25,7 @@ dependencies {
 
     implementation 'com.h2database:h2'
     implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.hibernate.validator:hibernate-validator:6.1.5.Final'
 
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

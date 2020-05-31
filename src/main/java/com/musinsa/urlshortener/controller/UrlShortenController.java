@@ -2,7 +2,7 @@ package com.musinsa.urlshortener.controller;
 
 import com.musinsa.urlshortener.dto.request.UrlShortenRequestDto;
 import com.musinsa.urlshortener.dto.response.ResponseDto;
-import com.musinsa.urlshortener.service.UrlService;
+import com.musinsa.urlshortener.service.UrlShortenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
-public class UrlController {
+public class UrlShortenController {
 
     @Autowired
-    UrlService urlService;
+    UrlShortenService urlService;
 
     @GetMapping("{shortenUrl}")
     public String getUrlRedirect(@PathVariable("shortenUrl") String shortenUrl, HttpServletResponse response) {

@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Slf4j
 @Service
 @Transactional
-public class UrlServiceImpl implements UrlService {
+public class UrlShortenServiceImpl implements UrlShortenService {
 
     @Autowired
     UrlShortenRepository urlShortenRepository;

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
 
-public interface UrlService {
+public interface UrlShortenService {
     ResponseEntity<ResponseDto> requestShortenUrl(UrlShortenRequestDto urlShortenRequestDto);
     String redirectShortenUrl(String shortenUrl, HttpServletResponse response);
 }
