@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "url_shorten")
-public class UrlShortenEntity {
+public class UrlShortenerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

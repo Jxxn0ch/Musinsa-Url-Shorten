@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UrlShortenRequestDto {
+public class UrlShortenerRequestDto {
     @NotEmpty
     @URL(message = "유효하지 않은 url 입니다.")
     private String url;

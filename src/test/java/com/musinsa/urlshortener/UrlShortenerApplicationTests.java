@@ -1,10 +1,10 @@
 package com.musinsa.urlshortener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.musinsa.urlshortener.dto.request.UrlShortenRequestDto;
-import com.musinsa.urlshortener.entity.UrlShortenEntity;
-import com.musinsa.urlshortener.repository.UrlShortenRepository;
-import com.musinsa.urlshortener.service.UrlShortenService;
+import com.musinsa.urlshortener.dto.request.UrlShortenerRequestDto;
+import com.musinsa.urlshortener.entity.UrlShortenerEntity;
+import com.musinsa.urlshortener.repository.UrlShortenerRepository;
+import com.musinsa.urlshortener.service.UrlShortenerService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -25,23 +25,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-class UrlshortenerApplicationTests {
+class UrlShortenerApplicationTests {
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
-    UrlShortenService urlShortenService;
+    UrlShortenerService urlShortenService;
 
     @Autowired
-    UrlShortenRepository urlShortenRepository;
+    UrlShortenerRepository urlShortenRepository;
 
     @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
     void beforeEach() {
-        UrlShortenRequestDto urlShortenRequestDto = new UrlShortenRequestDto();
+        UrlShortenerRequestDto urlShortenRequestDto = new UrlShortenerRequestDto();
         urlShortenRequestDto.setUrl("http://www.naver.com");
         urlShortenService.requestShortenUrl(urlShortenRequestDto);
     }
@@ -63,9 +63,9 @@ class UrlshortenerApplicationTests {
     @Test
     @DisplayName("Shorten URL 생성 - 성공")
     void requestUrlShorten_success() throws Exception {
-        mockMvc.perform(post("/url-shorten")
+        mockMvc.perform(post("/url-shortener")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new UrlShortenRequestDto("http://www.daum.net"))))
+                .content(objectMapper.writeValueAsString(new UrlShortenerRequestDto("http://www.daum.net"))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.originUrl").value("www.daum.net"))
                 .andExpect(jsonPath("$.shortenUrl").isNotEmpty())
@@ -76,9 +76,9 @@ class UrlshortenerApplicationTests {
     @Test
     @DisplayName("Shorten URL 생성 - 실패")
     void requestUrlShorten_fail() throws Exception {
-        mockMvc.perform(post("/url-shorten")
+        mockMvc.perform(post("/url-shortener")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new UrlShortenRequestDto("www.daum.net"))))
+                .content(objectMapper.writeValueAsString(new UrlShortenerRequestDto("www.daum.net"))))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
@@ -86,7 +86,7 @@ class UrlshortenerApplicationTests {
     @Test
     @DisplayName("Shorten URL 리다이렉트 - 성공")
     void redirectShortenUrl_success() throws Exception {
-        UrlShortenEntity urlShortenEntity = urlShortenRepository.findByOriginUrl("www.naver.com")
+        UrlShortenerEntity urlShortenEntity = urlShortenRepository.findByOriginUrl("www.naver.com")
                 .orElseThrow(() -> new NotFoundException("Shorten URL Not Found"));
 
         mockMvc.perform(get("/" + urlShortenEntity.getShortUrl()))

@@ -8,15 +8,24 @@
             let url = $('#url').val();
             $.ajax({
                 type: "post",
-                url : "/url-shorten",
+                url : "/url-shortener",
                 contentType : 'application/json',
                 data : JSON.stringify({'url' : url}),
                 dataType : "JSON",
                 success : function (data) {
-                    let result = "<label for='originUrl'> 입력 주소 : " + data.originUrl + " </label><br>" +
+                    let successHtml = "<label for='successYn'> 성공 </label><br>" +
+                                 "<label for='originUrl'> 입력 주소 : " + data.originUrl + " </label><br>" +
                                  "<label for='shortenUrl'> 축소된 주소 : </label><a href='"+ data.shortenUrl +"' target='_blank'>" + data.shortenUrl + "</a><br>" +
                                  "<label for='requestCount'> 요청 횟수 : " + data.requestCount + " </label>";
-                    $("#result").html(result);
+                    $("#result").html(successHtml);
+                },
+                error : function (data) {
+                    let errorHtml = "<label for='successYn'> 실패 </label><br>" +
+                                 "<label for='errorCode'> 에러 코드 : " + data.responseJSON.status + " </label><br>" +
+                                 "<label for='errorType'> 에러 유형 : " + data.responseJSON.errorType + " </label><br>" +
+                                 "<label for='errorMessage'> 상세 메시지 : " + data.responseJSON.errorMessage + " </label><br>";
+
+                    $("#result").html(errorHtml);
                 }
             })
         }
