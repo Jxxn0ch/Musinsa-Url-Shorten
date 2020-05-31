@@ -31,24 +31,24 @@ class UrlShortenerApplicationTests {
     MockMvc mockMvc;
 
     @Autowired
-    UrlShortenerService urlShortenService;
+    UrlShortenerService urlShortenerService;
 
     @Autowired
-    UrlShortenerRepository urlShortenRepository;
+    UrlShortenerRepository urlShortenerRepository;
 
     @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
     void beforeEach() {
-        UrlShortenerRequestDto urlShortenRequestDto = new UrlShortenerRequestDto();
-        urlShortenRequestDto.setUrl("http://www.naver.com");
-        urlShortenService.requestShortenUrl(urlShortenRequestDto);
+        UrlShortenerRequestDto urlShortenerRequestDto = new UrlShortenerRequestDto();
+        urlShortenerRequestDto.setUrl("http://www.naver.com");
+        urlShortenerService.requestShortenUrl(urlShortenerRequestDto);
     }
 
     @AfterEach
     void afterEach() {
-        urlShortenRepository.deleteAll();
+        urlShortenerRepository.deleteAll();
     }
 
     @Test
@@ -86,7 +86,7 @@ class UrlShortenerApplicationTests {
     @Test
     @DisplayName("Shorten URL 리다이렉트 - 성공")
     void redirectShortenUrl_success() throws Exception {
-        UrlShortenerEntity urlShortenEntity = urlShortenRepository.findByOriginUrl("www.naver.com")
+        UrlShortenerEntity urlShortenEntity = urlShortenerRepository.findByOriginUrl("www.naver.com")
                 .orElseThrow(() -> new NotFoundException("Shorten URL Not Found"));
 
         mockMvc.perform(get("/" + urlShortenEntity.getShortUrl()))
