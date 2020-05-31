@@ -13,15 +13,15 @@
                 data : JSON.stringify({'url' : url}),
                 dataType : "JSON",
                 success : function (data) {
-                    let result = "<label for='originUrl'> 입력 주소 : " + data.originUrl + " </label>" +
-                                 "<label for='shortenUrl'> 축소된 주소 : </label><a href='"+ data.shortenUrl +"' target='_blank'>" + data.shortenUrl + "</a>" +
+                    let result = "<label for='originUrl'> 입력 주소 : " + data.originUrl + " </label><br>" +
+                                 "<label for='shortenUrl'> 축소된 주소 : </label><a href='"+ data.shortenUrl +"' target='_blank'>" + data.shortenUrl + "</a><br>" +
                                  "<label for='requestCount'> 요청 횟수 : " + data.requestCount + " </label>";
                     $("#result").html(result);
                 }
             })
         }
     </script>
-    <title>Title</title>
+    <title>URL 축소 페이지</title>
 </head>
 <body>
 <label for="url">URL 입력 : </label><input type="text" id="url"/> <button type="button" id="generate" onclick="generate_url()">변환</button>

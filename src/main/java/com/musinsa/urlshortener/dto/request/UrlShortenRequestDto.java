@@ -10,6 +10,6 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class UrlShortenRequestDto {
     @NotEmpty
-    @URL
+    @URL(message = "유효하지 않은 url 입니다.")
     private String url;
 }

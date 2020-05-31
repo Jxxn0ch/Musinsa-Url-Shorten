@@ -2,11 +2,9 @@ package com.musinsa.urlshortener.service;
 
 import com.musinsa.urlshortener.dto.request.UrlShortenRequestDto;
 import com.musinsa.urlshortener.dto.response.ResponseDto;
-import org.springframework.http.ResponseEntity;
-
-import javax.servlet.http.HttpServletResponse;
+import com.musinsa.urlshortener.exception.ShortenUrlNotFoundException;
 
 public interface UrlShortenService {
-    ResponseEntity<ResponseDto> requestShortenUrl(UrlShortenRequestDto urlShortenRequestDto);
-    String redirectShortenUrl(String shortenUrl, HttpServletResponse response);
+    ResponseDto requestShortenUrl(UrlShortenRequestDto urlShortenRequestDto);
+    String redirectShortenUrl(String shortenUrl) throws ShortenUrlNotFoundException;
 }

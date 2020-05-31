@@ -17,8 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -67,11 +65,21 @@ class UrlshortenerApplicationTests {
     void requestUrlShorten_success() throws Exception {
         mockMvc.perform(post("/url-shorten")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new UrlShortenRequestDto("http://www.naver.com"))))
+                .content(objectMapper.writeValueAsString(new UrlShortenRequestDto("http://www.daum.net"))))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.originUrl").value("www.naver.com"))
+                .andExpect(jsonPath("$.originUrl").value("www.daum.net"))
                 .andExpect(jsonPath("$.shortenUrl").isNotEmpty())
                 .andExpect(jsonPath("$.requestCount").value(1))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Shorten URL 생성 - 실패")
+    void requestUrlShorten_fail() throws Exception {
+        mockMvc.perform(post("/url-shorten")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new UrlShortenRequestDto("www.daum.net"))))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
@@ -91,9 +99,8 @@ class UrlshortenerApplicationTests {
     @DisplayName("Shorten URL 리다이렉트 - 실패")
     void redirectShortenUrl_fail() throws Exception {
         mockMvc.perform(get("/shorten-url"))
-                // .andExpect(status().isNotFound())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http:///error"))
+                .andExpect(redirectedUrl("/error"))
                 .andDo(print());
     }
 
