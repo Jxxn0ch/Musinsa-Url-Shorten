@@ -1,0 +1,46 @@
+server:
+  port: ${PORT:80}
+
+spring:
+  application:
+    name: musinsa-urlshortener
+
+  main:
+    banner-mode: "off"
+    allow-bean-definition-overriding: true
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    platform: h2
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:tcp://localhost:9092/mem:homework
+      username: sa
+      password:
+
+  jpa:
+    database-platform: H2
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+      format_sql: true
+      use_sql_comments: true
+      type: info
+    open-in-view: false
+
+logging:
+  level:
+    root: info
+    com.musinsa.urlshortener: debug
+    org:
+      hibernate:
+        SQL: info
+        type: info
+  file:
+    name: logs/musinsa-urlshortener.log
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        function generate_url() {
+            let url = $('#url').val();
+            $.ajax({
+                type: "post",
+                url : "/url-shorten",
+                contentType : 'application/json',
+                data : JSON.stringify({'url' : url}),
+                dataType : "JSON",
+                success : function (data) {
+                    let result = "<label for='originUrl'> 입력 주소 : " + data.originUrl + " </label>" +
+                                 "<label for='shortenUrl'> 축소된 주소 : </label><a href='"+ data.shortenUrl +"' target='_blank'>" + data.shortenUrl + "</a>" +
+                                 "<label for='requestCount'> 요청 횟수 : " + data.requestCount + " </label>";
+                    $("#result").html(result);
+                }
+            })
+        }
+    </script>
+    <title>Title</title>
+</head>
+<body>
+<label for="url">URL 입력 : </label><input type="text" id="url"/> <button type="button" id="generate" onclick="generate_url()">변환</button>
+<div id="result"></div>
+</body>
+</html>
