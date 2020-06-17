@@ -15,7 +15,7 @@
 
 -----
 
-1. 프로젝트를 받고자 하는 경로에서 `git clone https://github.com/Jxxn0ch/Musinsa-Url-Shorten.git` 실행
+1. 프로젝트를 받고자 하는 경로에서 `git clone https://github.com/Jxxn0ch/Url-Shorten.git` 실행
 2. Clone 된 경로로 이동 후 `./gradlew bootrun` 실행
 3. 브라우저에서 <http://localhost> 접속
 4. 입력창에 축소 시키고자 하는 주소 입력
